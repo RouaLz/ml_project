@@ -67,6 +67,12 @@ def unit_tests():
     run(["pytest", "tests", "-v"])
 
 
+@task(name="git_pull")
+def git_pull():
+    print(">> git pull origin main")
+    subprocess.run(["git", "pull", "origin", "main"], check=False)
+
+
 # ---------------- Taches liees aux donnees / modele ----------------
 
 
@@ -108,6 +114,7 @@ def predict_task(model, scaler):
 
 @flow(name="code")
 def code_flow():
+    git_pull()
     install_dependencies()
     format_code()
     quality_code()
@@ -132,6 +139,7 @@ def evaluate_flow():
 @flow(name="all")
 def all_flow():
     # Etapes liees au code
+    git_pull()
     install_dependencies()
     format_code()
     quality_code()
